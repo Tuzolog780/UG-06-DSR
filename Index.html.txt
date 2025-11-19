@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ДСР НПУ | Офіційний портал</title>
+    <style>
+        /* --- ОСНОВНІ НАЛАШТУВАННЯ --- */
+        :root {
+            --primary-color: #0f172a; /* Темно-синій фон */
+            --accent-gold: #fbbf24;   /* Золотий акцент */
+            --accent-blue: #38bdf8;   /* Блакитний акцент */
+            --text-color: #f8fafc;    /* Білий текст */
+            --glass-bg: rgba(30, 41, 59, 0.7); /* Ефект скла */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        /* --- ПОПЕРЕДЖЕННЯ (DISCLAIMER) --- */
+        .disclaimer-bar {
+            background: #ef4444; /* Червоний */
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            z-index: 1000;
+            position: relative;
+        }
+
+        /* --- НАВІГАЦІЯ --- */
+        nav {
+            position: sticky;
+            top: 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            z-index: 999;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            animation: slideDown 0.8s ease;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-blue);
+        }
+
+        /* --- ГОЛОВНИЙ ЕКРАН (HERO) --- */
+        .hero {
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Декоративні елементи фону */
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            opacity: 0.05;
+            animation: rotateBg 60s linear infinite;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 40px;
+            max-width: 600px;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        /* КНОПКА "ЗВЕРНУТИСЬ" */
+        .cta-btn {
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            background: var(--accent-gold);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .cta-btn:hover {
+            transform: scale(1.05);
+            background: #fff;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
+        }
+
+        /* --- СЕКЦІЇ --- */
+        section {
+            padding: 80px 50px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            text-align: center;
+            color: var(--text-color);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: var(--accent-blue);
+            margin: 15px auto;
+        }
+
+        /* НОВИНИ */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .news-card {
+            background: var(--glass-bg);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s;
+            opacity: 0; /* Для анімації JS */
+            transform: translateY(20px);
+        }
+
+        .news-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s ease-out;
+        }
+
+        .news-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-gold);
+        }
+
+        .news-date {
+            color: var(--accent-blue);
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+
+        /* РОЗШУК */
+        .wanted-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .wanted-card {
+            width: 250px;
+            background: #2a0a0a; /* Темно-червоний відтінок */
+            border: 2px solid #ef4444;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+            position: relative;
+        }
+        
+        .wanted-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            filter: grayscale(100%);
+            margin-bottom: 10px;
+        }
+
+        .wanted-card h3 {
+            color: #ef4444;
+            text-transform: uppercase;
+        }
+
+        /* ЗАРПЛАТА ТА СТРУКТУРА */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .info-text h3 {
+            color: var(--accent-gold);
+            margin-bottom: 15px;
+        }
+
+        .info-text ul {
+            list-style: none;
+        }
+        
+        .info-text li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .info-text li::before {
+            content: '➤';
+            color: var(--accent-blue);
+            position: absolute;
+            left: 0;
+        }
+
+        /* --- ФУТЕР --- */
+        footer {
+            background: #000;
+            padding: 40px;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        /* --- АНІМАЦІЇ (Keyframes) --- */
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(251, 191, 36, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
+        }
+
+        @keyframes rotateBg {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Адаптивність */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { display: none; } /* Спрощення для мобільного */
+            .info-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="disclaimer-bar">
+        ⚠ УВАГА! Цей сайт є частиною ігрового процесу (RP). Вся інформація не відповідає реальності та не має відношення до державних органів України.
+    </div>
+
+    <nav>
+        <div class="logo">ДСР <span style="color:#fff">|</span> НПУ</div>
+        <div class="nav-links">
+            <a href="#news">Головна</a>
+            <a href="#structure">Структура</a>
+            <a href="#wanted">Розшук</a>
+            <a href="#salary">Зарплата</a>
+            <a href="#recruitment">Вступ</a>
+            <a href="#contacts">Контакти</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>ДЕПАРТАМЕНТ СТРАТЕГІЧНИХ РОЗСЛІДУВАНЬ</h1>
+        <p>Честь. Закон. Безкомпромісність. <br> Ми там, де інші безсилі.</p>
+        <a href="#" class="cta-btn">ПОДАТИ ЗАЯВУ / ЗВЕРНУТИСЬ</a>
+    </header>
+
+    <section id="news">
+        <h2 class="section-title">Останні Події</h2>
+        <div class="news-grid">
+            <div class="news-card scroll-anim">
+                <div class="news-date">19.11.2025</div>
+                <h3>Спецоперація "Чистий Лист"</h3>
+                <p>Успішно ліквідовано верхівку ОЗГ "OMEGA". Затримано лідера та 6 активних учасників. Вилучено рекордну кількість речових доказів.</p>
+            </div>
+            <div class="news-card scroll-anim">
+                <div class="news-date">18.11.2025</div>
+                <h3>Спільна нарада з КОРД</h3>
+                <p>Проведено тактичні навчання по штурму укріплених об'єктів. Відпрацьовано взаємодію між оперативниками та спецназом.</p>
+            </div>
+            <div class="news-card scroll-anim">
+                <div class="news-date">15.11.2025</div>
+                <h3>Оновлення автопарку</h3>
+                <p>ДСР отримав нові спеціалізовані транспортні засоби для проведення прихованого спостереження.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="structure">
+        <h2 class="section-title">Структура ДСР</h2>
+        <div class="info-grid">
+            <div class="info-text scroll-anim">
+                <h3>Ієрархія підрозділу</h3>
+                <p>Наша структура побудована для максимальної ефективності та секретності.</p>
+                <br>
+                <ul>
+                    <li><strong>Керівництво ДСР:</strong> Стратегічне планування.</li>
+                    <li><strong>Слідчий відділ:</strong> Процесуальне оформлення злочинів ОЗГ.</li>
+                    <li><strong>Оперативний відділ:</strong> Розвідка, агентура, НСРД.</li>
+                    <li><strong>Академія:</strong> Підготовка нових кадрів.</li>
+                </ul>
+            </div>
+            <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; text-align: center;">
+                <h4 style="color: var(--accent-blue);">Всього особового складу:</h4>
+                <h2 style="font-size: 4rem; color: #fff;">25</h2>
+                <p>Елітних фахівців</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="wanted">
+        <h2 class="section-title" style="color: #ef4444;">УВАГА: РОЗШУК</h2>
+        <div class="wanted-container">
+            <div class="wanted-card scroll-anim">
+                <img src="https://via.placeholder.com/200?text=WANTED" alt="Criminal">
+                <h3>Невідома Особа</h3>
+                <p>ОЗГ "Cartel"</p>
+                <p style="color: gold; font-weight: bold;">Винагорода: $$$</p>
+            </div>
+            <div class="wanted-card scroll-anim">
+                <img src="https://via.placeholder.com/200?text=WANTED" alt="Criminal">
+                <h3>Андрій "Хімік"</h3>
+                <p>Наркоторгівля</p>
+                <p style="color: gold; font-weight: bold;">Винагорода: $$$</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="recruitment" style="background: linear-gradient(45deg, #0f172a, #1e293b);">
+        <h2 class="section-title">Кар'єра в ДСР</h2>
+        <div class="info-grid">
+            <div class="scroll-anim">
+                <h3>Як до нас потрапити?</h3>
+                <p>Ми не беремо всіх. Ми шукаємо найкращих.</p>
+                <br>
+                <ul>
+                    <li>Звання в НПУ: не нижче <strong>Сержанта (3)</strong>.</li>
+                    <li>Бездоганне знання КПК та ЗУ про Нацполіцію.</li>
+                    <li>Стресостійкість та адекватність.</li>
+                    <li>Пройти співбесіду в Discord.</li>
+                </ul>
+                <br>
+                <a href="#" class="cta-btn" style="font-size: 0.9rem; padding: 10px 20px;">ЗАПОВНИТИ АНКЕТУ КАНДИДАТА</a>
+            </div>
+            <div class="scroll-anim">
+                <h3>Заробітна Плата</h3>
+                <ul>
+                    <li>Стажер: від 20 000 грн</li>
+                    <li>Оперуповноважений: від 35 000 грн + премії за розкриття.</li>
+                    <li>Слідчий: від 40 000 грн.</li>
+                    <li>Керівництво: Визначається Генералом.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacts">
+        <h2 class="section-title">Контакти</h2>
+        <div style="text-align: center; font-size: 1.2rem;">
+            <p>📍 Головний офіс: м. Харків, вул. Шевченка, 23 (Секретний об'єкт)</p>
+            <br>
+            <p>📞 Спецлінія: <strong>102 (Код: ДСР)</strong></p>
+            <br>
+            <p>📧 Електронна пошта (RP): dsr_report@npu.gov.ua</p>
+            <br>
+            <p>💬 Telegram HR: <strong>@gromov_ug</strong></p>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 Департамент Стратегічних Розслідувань. Всі права захищено.</p>
+        <p style="font-size: 0.7rem; margin-top: 10px; color: #475569;">
+            This is a roleplay website for a game server. Not affiliated with real law enforcement.
+        </p>
+    </footer>
+
+    <script>
+        // Скрипт для анімації появи елементів при скролі
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-anim').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
